@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/image")
 public class ControllerV2 {
@@ -20,13 +22,14 @@ public class ControllerV2 {
     }
 
     @PostMapping
-    public ResponseEntity<?> uploadImages(@RequestParam("image")MultipartFile file) throws Exception {
-        String uploadImages = service.uploadImage(file);
-        return ResponseEntity.status(HttpStatus.OK).body(uploadImages);
+    public ResponseEntity<?> uploadImage(@RequestParam("image")MultipartFile file) throws IOException {
+        String uploadImage = service.uploadImage(file);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(uploadImage);
     }
 
-    @GetMapping("/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+    @GetMapping("/{fn}")
+    public ResponseEntity<?> downloadImage(@PathVariable("fn") String fileName){
         byte[] imageData = service.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
